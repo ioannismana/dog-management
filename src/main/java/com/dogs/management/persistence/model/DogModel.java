@@ -65,6 +65,12 @@ public class DogModel {
     @JsonProperty("kennelling_characteristic")
     private String kennellingCharacteristic;
 
+    // Default constructor
+    public DogModel(){
+
+    }
+
+    // Constructor
     public DogModel(Long badgeId, String name, String breed, LocalDate birthDate, LocalDate acquisitionDate, LocalDate leavingDate, String supplier, String gender, String currentStatus, String leavingReason, String kennellingCharacteristic) {
         this.badgeId = badgeId;
         this.name = name;
