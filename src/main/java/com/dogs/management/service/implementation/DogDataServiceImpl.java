@@ -33,9 +33,9 @@ public class DogDataServiceImpl implements DogDataService {
     public Page<DogModel> filterDogs(int page, int pageSize, Map<String, String> filters){
         Pageable pageable = PageRequest.of(page, pageSize);
         try {
-            String name = filters.get("name");
-            String breed = filters.get("breed");
-            String supplier = filters.get("supplier");
+            String name = filters.getOrDefault("name", "");
+            String breed = filters.getOrDefault("breed", "");
+            String supplier = filters.getOrDefault("supplier", "");
 
             Page<DogModel> response = dogInfoDAO.findByNameContainingAndBreedContainingAndSupplierContaining(
                     name, breed, supplier, pageable
