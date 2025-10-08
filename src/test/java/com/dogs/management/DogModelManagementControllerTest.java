@@ -8,6 +8,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.dogs.management.controller.DogDataController;
+import com.dogs.management.dto.DogDTO;
+import com.dogs.management.persistence.DogInfoDAO;
 import com.dogs.management.persistence.model.DogModel;
 import com.dogs.management.service.DogDataService;
 import com.google.common.base.Splitter;
@@ -27,6 +29,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import com.dogs.management.persistence.model.mapper.DogMapper;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -35,6 +38,13 @@ import java.util.Map;
 @SpringBootTest
 @AutoConfigureMockMvc
 public class DogModelManagementControllerTest {
+
+    private final DogMapper dogMapper;
+
+    @Autowired
+    public DogModelManagementControllerTest(DogMapper dogMapper) {
+        this.dogMapper = dogMapper;
+    }
 
     @Autowired
     private MockMvc mvc;
@@ -58,13 +68,18 @@ public class DogModelManagementControllerTest {
                 new DogModel(3L, "Rea", "corgi", LocalDate.parse("2024-01-01"), LocalDate.parse("2024-03-03"), null, "Harrods", "male", "In Service", "", "")
         );
 
+        // convert to DTOs
+        List<DogDTO> mockDogDTOs = mockDogs.stream()
+                .map(dogMapper::dogModelToDogDTO)  // or create manually if mapper is not injected
+                .toList();
+
         Pageable pageable = PageRequest.of(1, 1);
-        Page<DogModel> pagedDogs = new PageImpl<>(mockDogs, pageable, 2);  // totalElements = 2
+        Page<DogDTO> pagedDogs = new PageImpl<>(mockDogDTOs, pageable, 2);  // totalElements = 2
 
         when(dogDataService.getAllDogs(1, 1)).thenReturn(pagedDogs);
 
         // Act: call the controller
-        Page<DogModel> result = dogDataController.getDogs(1, 1, "");
+        Page<DogDTO> result = dogDataController.getDogs(1, 1, "");
 
         // Assert: verify results
         assertNotNull(result);
@@ -85,16 +100,21 @@ public class DogModelManagementControllerTest {
                 new DogModel(3L, "Rea", "corgi", LocalDate.parse("2024-01-01"), LocalDate.parse("2024-03-03"), null, "Harrods", "male", "In Service", "", "")
         );
 
+        // convert to DTOs
+        List<DogDTO> mockDogDTOs = mockDogs.stream()
+                .map(dogMapper::dogModelToDogDTO)  // or create manually if mapper is not injected
+                .toList();
+
         String filterStr = "filter=name:Chloe,breed:,supplier:Harrods";
         Map<String, String> filters = Splitter.on( "," ).withKeyValueSeparator( ':' ).split( filterStr );
 
         Pageable pageable = PageRequest.of(0, 1);
-        Page<DogModel> pagedDogs = new PageImpl<>(mockDogs, pageable, 1);
+        Page<DogDTO> pagedDogs = new PageImpl<>(mockDogDTOs, pageable, 1);
 
         when(dogDataService.filterDogs(0, 10, filters)).thenReturn(pagedDogs);
 
         // Act: call the controller
-        Page<DogModel> result = dogDataController.getDogs(0, 10, filterStr);
+        Page<DogDTO> result = dogDataController.getDogs(0, 10, filterStr);
 
         // Assert: verify results
         assertNotNull(result);

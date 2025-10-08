@@ -1,5 +1,6 @@
 package com.dogs.management.controller;
 
+import com.dogs.management.dto.DogDTO;
 import com.dogs.management.persistence.model.DogModel;
 import com.dogs.management.persistence.model.response.DogServiceResponse;
 import com.dogs.management.service.DogDataService;
@@ -19,7 +20,7 @@ public class DogDataController implements DogDataApi {
     DogDataService dogDataService;
 
     @Override
-    public Page<DogModel> getDogs(int page, int pageSize, String filterStr) {
+    public Page<DogDTO> getDogs(int page, int pageSize, String filterStr) {
         if (filterStr == null || filterStr.isEmpty()) {
             return dogDataService.getAllDogs(page, pageSize);
         } else {

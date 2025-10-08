@@ -1,7 +1,8 @@
 package com.dogs.management.service.implementation;
-
+import com.dogs.management.dto.DogDTO;
 import com.dogs.management.persistence.DogInfoDAO;
 import com.dogs.management.persistence.model.DogModel;
+import com.dogs.management.persistence.model.mapper.DogMapper;
 import com.dogs.management.service.DogDataService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -24,12 +25,20 @@ public class DogDataServiceImpl implements DogDataService {
     @Value("#{'${app.allowed.leaving-reason}'.split(',')}")
     private String allowedLeavingReasons;
 
-    @Autowired
-    DogInfoDAO dogInfoDAO;
+//    @Autowired
+//    DogInfoDAO dogInfoDAO;
 
+    private final DogInfoDAO dogInfoDAO;
+    private final DogMapper dogMapper; // injected automatically by Spring
+
+    @Autowired
+    public DogDataServiceImpl(DogInfoDAO dogInfoDAO, DogMapper dogMapper) {
+        this.dogInfoDAO = dogInfoDAO;
+        this.dogMapper = dogMapper;
+    }
 
     @Override
-    public Page<DogModel> filterDogs(int page, int pageSize, Map<String, String> filters){
+    public Page<DogDTO> filterDogs(int page, int pageSize, Map<String, String> filters){
         Pageable pageable = PageRequest.of(page, pageSize);
         try {
             String name = filters.getOrDefault("name", "");
@@ -40,17 +49,18 @@ public class DogDataServiceImpl implements DogDataService {
                     name, breed, supplier, pageable
             );
 
-            return response;
+            return response.map(dogMapper::dogModelToDogDTO);
         } catch (Exception x) {
             return Page.empty(pageable);
         }
     }
 
     @Override
-    public Page<DogModel> getAllDogs(int page, int pageSize){
+    public Page<DogDTO> getAllDogs(int page, int pageSize){
         try {
             Pageable pageable = PageRequest.of(page, pageSize);
-            return dogInfoDAO.findAll(pageable);
+            Page<DogModel> response = dogInfoDAO.findAll(pageable);
+            return response.map(dogMapper::dogModelToDogDTO);
         } catch (Exception x) {
             return null;
         }
