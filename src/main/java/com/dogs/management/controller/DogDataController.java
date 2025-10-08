@@ -17,8 +17,8 @@ public class DogDataController implements DogDataApi {
     DogDataService dogDataService;
 
     @Override
-    public List<DogModel> getAllDogs() {
-        return dogDataService.getAllDogs();
+    public List<DogModel> getAllDogs(int page, int pageSize) {
+        return dogDataService.getAllDogs(page, pageSize);
     }
 
     @Override

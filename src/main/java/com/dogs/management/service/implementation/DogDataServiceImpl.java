@@ -5,6 +5,8 @@ import com.dogs.management.persistence.model.DogModel;
 import com.dogs.management.service.DogDataService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,8 +27,9 @@ public class DogDataServiceImpl implements DogDataService {
     DogInfoDAO dogInfoDAO;
 
     @Override
-    public List<DogModel> getAllDogs(){
+    public List<DogModel> getAllDogs(int page, int pageSize){
         try {
+            Pageable pageable = PageRequest.of(page, pageSize);
             return dogInfoDAO.findAll();
         } catch (Exception x) {
             return null;

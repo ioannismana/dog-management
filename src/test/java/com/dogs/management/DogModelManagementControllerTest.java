@@ -52,10 +52,10 @@ public class DogModelManagementControllerTest {
                 new DogModel(3L, "Rea", "corgi", LocalDate.parse("2024-01-01"), LocalDate.parse("2024-03-03"), null, "Harrods", "male", "In Service", "", "")
         );
 
-        when(dogDataService.getAllDogs()).thenReturn(mockDogs);
+        when(dogDataService.getAllDogs(1, 1)).thenReturn(mockDogs);
 
         // Act: call the controller
-        List<DogModel> result = dogDataController.getAllDogs();
+        List<DogModel> result = dogDataController.getAllDogs(1, 1);
 
         // Assert: verify results
         assertNotNull(result);
@@ -63,7 +63,7 @@ public class DogModelManagementControllerTest {
         assertEquals("Chloe", result.get(0).getName());
 
         // Verify service was called once
-        verify(dogDataService, times(1)).getAllDogs();
+        verify(dogDataService, times(1)).getAllDogs(1, 1);
     }
     
     @Test

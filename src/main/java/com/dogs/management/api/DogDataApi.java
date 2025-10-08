@@ -11,7 +11,8 @@ public interface DogDataApi {
 
     @GetMapping(value = "/dogs", produces = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "Gets all the dogs in database")
-    public List<DogModel> getAllDogs();
+    public List<DogModel> getAllDogs(@RequestParam(value = "page", defaultValue = "0") int page,
+                                     @RequestParam(value = "pageSize", defaultValue = "10") int pageSize);
 
     @DeleteMapping(value = "/delete", produces = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "Deletes a dog from the database by badgeId")
