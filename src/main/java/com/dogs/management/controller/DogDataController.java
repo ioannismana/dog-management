@@ -6,11 +6,9 @@ import com.dogs.management.service.DogDataService;
 import com.google.common.base.Splitter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.dogs.management.api.DogDataApi;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Map;
 
@@ -23,18 +21,15 @@ public class DogDataController implements DogDataApi {
 
     @Override
     public Page<DogModel> filterDogs(int page, int pageSize, String filterStr) {
+        // If the filter is empty or null replace with a default
         if (filterStr == null || filterStr.isEmpty()) {
             filterStr = "name:,breed:,supplier:";
         }
 
         // extract the filters from filterStr
         Map<String, String> filters = Splitter.on( "," ).withKeyValueSeparator( ':' ).split( filterStr );
-        if (!filters.isEmpty()) {  // at least one filter has been supplied
-            System.out.println(filters);
-            return dogDataService.filterDogs(page, pageSize, filters);
-        } else {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid filter");
-        }
+        System.out.println(filters);
+        return dogDataService.filterDogs(page, pageSize, filters);
     }
 
     @Override
