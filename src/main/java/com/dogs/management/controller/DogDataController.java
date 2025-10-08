@@ -4,6 +4,7 @@ import com.dogs.management.persistence.model.DogModel;
 import com.dogs.management.persistence.model.response.DogServiceResponse;
 import com.dogs.management.service.DogDataService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.dogs.management.api.DogDataApi;
@@ -17,7 +18,7 @@ public class DogDataController implements DogDataApi {
     DogDataService dogDataService;
 
     @Override
-    public List<DogModel> getAllDogs(int page, int pageSize) {
+    public Page<DogModel> getAllDogs(int page, int pageSize) {
         return dogDataService.getAllDogs(page, pageSize);
     }
 

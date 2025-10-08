@@ -1,6 +1,7 @@
 package com.dogs.management.api;
 import com.dogs.management.persistence.model.DogModel;
 import com.dogs.management.persistence.model.response.DogServiceResponse;
+import org.springframework.data.domain.Page;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import io.swagger.v3.oas.annotations.Operation;
@@ -11,7 +12,7 @@ public interface DogDataApi {
 
     @GetMapping(value = "/dogs", produces = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "Gets all the dogs in database")
-    public List<DogModel> getAllDogs(@RequestParam(value = "page", defaultValue = "0") int page,
+    public Page<DogModel> getAllDogs(@RequestParam(value = "page", defaultValue = "0") int page,
                                      @RequestParam(value = "pageSize", defaultValue = "10") int pageSize);
 
     @DeleteMapping(value = "/delete", produces = MediaType.APPLICATION_JSON_VALUE)
