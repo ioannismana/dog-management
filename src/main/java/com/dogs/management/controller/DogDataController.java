@@ -18,23 +18,15 @@ public class DogDataController implements DogDataApi {
     @Autowired
     DogDataService dogDataService;
 
-
     @Override
-    public Page<DogModel> filterDogs(int page, int pageSize, String filterStr) {
-        // If the filter is empty or null replace with a default
+    public Page<DogModel> getAllDogs(int page, int pageSize, String filterStr) {
         if (filterStr == null || filterStr.isEmpty()) {
-            filterStr = "name:,breed:,supplier:";
+            return dogDataService.getAllDogs(page, pageSize);
+        } else {
+            // extract the filters from filterStr
+            Map<String, String> filters = Splitter.on( "," ).withKeyValueSeparator( ':' ).split( filterStr );
+            return dogDataService.filterDogs(page, pageSize, filters);
         }
-
-        // extract the filters from filterStr
-        Map<String, String> filters = Splitter.on( "," ).withKeyValueSeparator( ':' ).split( filterStr );
-        System.out.println(filters);
-        return dogDataService.filterDogs(page, pageSize, filters);
-    }
-
-    @Override
-    public Page<DogModel> getAllDogs(int page, int pageSize) {
-        return dogDataService.getAllDogs(page, pageSize);
     }
 
     @Override

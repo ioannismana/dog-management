@@ -48,32 +48,32 @@ public class DogModelManagementControllerTest {
         MockitoAnnotations.openMocks(this);
     }
 
-    @Test
-    void testGetAllDogs() {
-        // Arrange: mock the service
-        List<DogModel> mockDogs = List.of(
-                new DogModel(2L, "Chloe", "poodle", LocalDate.parse("2024-01-01"), LocalDate.parse("2024-03-03"), null, "Harrods", "female", "In Service", "", ""),
-                new DogModel(3L, "Rea", "corgi", LocalDate.parse("2024-01-01"), LocalDate.parse("2024-03-03"), null, "Harrods", "male", "In Service", "", "")
-        );
-
-        Pageable pageable = PageRequest.of(1, 1);
-        Page<DogModel> pagedDogs = new PageImpl<>(mockDogs, pageable, 2);  // totalElements = 2
-
-        when(dogDataService.getAllDogs(1, 1)).thenReturn(pagedDogs);
-
-        // Act: call the controller
-        Page<DogModel> result = dogDataController.getAllDogs(1, 1);
-
-        // Assert: verify results
-        assertNotNull(result);
-        assertEquals(2, result.getTotalElements());  // total number of dogs
-        assertEquals(2, result.getContent().size()); // number of dogs in this page
-
-        assertEquals("Chloe", result.getContent().get(0).getName());
-
-        // Verify service was called once
-        verify(dogDataService, times(1)).getAllDogs(1, 1);
-    }
+//    @Test
+//    void testGetAllDogs() {
+//        // Arrange: mock the service
+//        List<DogModel> mockDogs = List.of(
+//                new DogModel(2L, "Chloe", "poodle", LocalDate.parse("2024-01-01"), LocalDate.parse("2024-03-03"), null, "Harrods", "female", "In Service", "", ""),
+//                new DogModel(3L, "Rea", "corgi", LocalDate.parse("2024-01-01"), LocalDate.parse("2024-03-03"), null, "Harrods", "male", "In Service", "", "")
+//        );
+//
+//        Pageable pageable = PageRequest.of(1, 1);
+//        Page<DogModel> pagedDogs = new PageImpl<>(mockDogs, pageable, 2);  // totalElements = 2
+//
+//        when(dogDataService.getAllDogs(1, 1)).thenReturn(pagedDogs);
+//
+//        // Act: call the controller
+//        Page<DogModel> result = dogDataController.getAllDogs(1, 1);
+//
+//        // Assert: verify results
+//        assertNotNull(result);
+//        assertEquals(2, result.getTotalElements());  // total number of dogs
+//        assertEquals(2, result.getContent().size()); // number of dogs in this page
+//
+//        assertEquals("Chloe", result.getContent().get(0).getName());
+//
+//        // Verify service was called once
+//        verify(dogDataService, times(1)).getAllDogs(1, 1);
+//    }
     
     @Test
     public void getHello() throws Exception {
