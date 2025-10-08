@@ -4,9 +4,12 @@ import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
+import java.util.Map;
 
 
 public interface DogDataService {
+
+    Page<DogModel> filterDogs(int page, int pageSize, Map<String, String> filters);
 
     Page<DogModel> getAllDogs(int page, int pageSize);
 

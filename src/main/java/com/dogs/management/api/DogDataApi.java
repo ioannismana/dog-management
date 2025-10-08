@@ -10,6 +10,12 @@ import java.util.List;
 
 public interface DogDataApi {
 
+    @GetMapping(value = "/filterDogs", produces = MediaType.APPLICATION_JSON_VALUE)
+    @Operation(summary = "Gets dogs filtered by: name, breed, supplier")
+    public Page<DogModel> filterDogs(@RequestParam(value = "page", defaultValue = "0") int page,
+                                     @RequestParam(value = "pageSize", defaultValue = "10") int pageSize,
+                                     @RequestParam(value = "filter", required = false) String filterStr);
+
     @GetMapping(value = "/dogs", produces = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "Gets all the dogs in database")
     public Page<DogModel> getAllDogs(@RequestParam(value = "page", defaultValue = "0") int page,

@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 
 
 @Service
@@ -26,6 +27,25 @@ public class DogDataServiceImpl implements DogDataService {
 
     @Autowired
     DogInfoDAO dogInfoDAO;
+
+
+    @Override
+    public Page<DogModel> filterDogs(int page, int pageSize, Map<String, String> filters){
+        Pageable pageable = PageRequest.of(page, pageSize);
+        try {
+            String name = filters.get("name");
+            String breed = filters.get("breed");
+            String supplier = filters.get("supplier");
+
+            Page<DogModel> response = dogInfoDAO.findByNameContainingAndBreedContainingAndSupplierContaining(
+                    name, breed, supplier, pageable
+            );
+
+            return response;
+        } catch (Exception x) {
+            return Page.empty(pageable);
+        }
+    }
 
     @Override
     public Page<DogModel> getAllDogs(int page, int pageSize){
