@@ -19,7 +19,7 @@ public class DogDataController implements DogDataApi {
     DogDataService dogDataService;
 
     @Override
-    public Page<DogModel> getAllDogs(int page, int pageSize, String filterStr) {
+    public Page<DogModel> getDogs(int page, int pageSize, String filterStr) {
         if (filterStr == null || filterStr.isEmpty()) {
             return dogDataService.getAllDogs(page, pageSize);
         } else {
